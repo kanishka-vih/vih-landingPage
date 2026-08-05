@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52.311" height="47.049" viewBox="13.595 0 52.311 47.049" fill="none">
+  <defs>
+    <linearGradient id="vihg" gradientUnits="userSpaceOnUse" x1="41.54" y1="-20.45" x2="23.11" y2="32.26">
+      <stop offset="0" stop-color="rgb(0,73,230)"></stop>
+      <stop offset="0.5824" stop-color="rgb(156,21,247)"></stop>
+      <stop offset="1" stop-color="rgb(255,76,248)"></stop>
+    </linearGradient>
+    <clipPath id="vihclip"><path transform="translate(13.595 0)" d="M 31.854 43.759 C 29.321 48.145 22.989 48.145 20.457 43.759 L 0.891 9.87 C -1.641 5.484 1.525 0 6.59 0 L 45.721 0 C 50.786 0 53.952 5.484 51.419 9.87 L 31.854 43.759 Z"></path></clipPath>
+  </defs>
+  <path transform="translate(13.595 0)" d="M 31.854 43.759 C 29.321 48.145 22.989 48.145 20.457 43.759 L 0.891 9.87 C -1.641 5.484 1.525 0 6.59 0 L 45.721 0 C 50.786 0 53.952 5.484 51.419 9.87 L 31.854 43.759 Z" fill="url(#vihg)"></path>
+  <g clip-path="url(#vihclip)"><circle cx="22.542" cy="24.539" r="26.495" fill="rgba(255,255,255,0.15)"></circle></g>
+</svg>
