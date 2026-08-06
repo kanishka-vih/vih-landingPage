@@ -491,10 +491,6 @@ class Component extends DCLogic {
       const z = this._mobileHeroZone; if (!z) return false;
       return x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h;
     };
-    const rectHitsZone = (rx, ry, rw, rh) => {
-      const z = this._mobileHeroZone; if (!z) return false;
-      return rx < z.x + z.w && rx + rw > z.x && ry < z.y + z.h && ry + rh > z.y;
-    };
 
     const resize = () => {
       const r = canvas.getBoundingClientRect();
@@ -584,36 +580,6 @@ class Component extends DCLogic {
           ctx.strokeStyle = 'rgba(' + DOT + ',' + strength.toFixed(3) + ')';
           ctx.beginPath(); ctx.moveTo(hubX, hubY); ctx.lineTo(r.x, r.y); ctx.stroke();
         }
-      }
-
-      for (const d of field) {
-        if (d.a <= 0.02) continue;
-        if (inZone(d.x, d.y)) continue;
-        const a = d.a;
-        const side = d.x < W * 0.55 ? 1 : -1;
-        const connectorLen = 70;
-        const tile = this._tiles[d.curImg ?? d.img];
-        const w = 46 * (0.82 + d.a * 0.12), h = w * tileAR(tile);
-        const cardX = d.x + side * (connectorLen + 30);
-        const cardY = d.y + 3;
-        const ix = side > 0 ? cardX : cardX - w;
-        const iy = cardY - h / 2;
-        if (rectHitsZone(ix, iy, w, h)) continue;
-        ctx.save();
-        ctx.globalAlpha = a * 0.9;
-        ctx.strokeStyle = 'rgba(' + DOT + ',0.52)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(d.x, d.y);
-        ctx.lineTo(d.x + side * (connectorLen + 12), d.y + 2);
-        ctx.lineTo(ix + (side > 0 ? 0 : w), iy + h / 2);
-        ctx.stroke();
-        ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 6;
-        roundRect(ctx, ix, iy, w, h, 5); ctx.fill();
-        ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
-        ctx.clip();
-        if (tile && tile.complete && tile.naturalWidth) ctx.drawImage(tile._scaled || tile, ix, iy, w, h);
-        ctx.restore();
       }
     };
     this._mobileFieldLastFrame = performance.now();
