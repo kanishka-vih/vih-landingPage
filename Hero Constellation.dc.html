@@ -16,6 +16,43 @@
   * { box-sizing: border-box; }
   a { color: rgb(177,91,252); text-decoration: none; }
   a:hover { color: rgb(221,84,249); }
+
+  @media (max-width: 760px) {
+    .hero-block {
+      left: 50% !important;
+      top: auto !important;
+      bottom: 190px !important;
+      width: 88vw !important;
+      transform: translateX(-50%) !important;
+    }
+    .hero-kicker, .hero-title { text-align: center !important; white-space: normal !important; }
+    .hero-title { font-size: clamp(24px, 7.5vw, 34px) !important; line-height: 1.25 !important; }
+    .hero-cta { align-self: center !important; width: min(280px, 90vw) !important; }
+
+    .intro-text { top: 96px !important; font-size: 13px !important; line-height: 20px !important; }
+
+    .product-card {
+      right: auto !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      width: min(320px, 88vw) !important;
+    }
+
+    .letters-row { font-size: clamp(40px, 15vw, 96px) !important; gap: 2vw !important; }
+    .ccc-caption { width: 88vw !important; font-size: 15px !important; line-height: 1.5 !important; }
+
+    .proof-section { padding: 90px 16px 70px !important; }
+    .proof-wrap { gap: 60px !important; }
+    .proof-inner { align-items: center !important; gap: 32px !important; }
+    .testimonial-card { flex-direction: column !important; padding: 24px 20px !important; gap: 20px !important; }
+    .testimonial-side { flex-direction: row !important; align-items: center !important; justify-content: space-between !important; width: 100% !important; gap: 16px !important; }
+    .logo-row { justify-content: center !important; gap: 24px !important; min-height: auto !important; }
+    .logo-row img { height: 40px !important; }
+
+    .contact-card { grid-template-columns: 1fr !important; padding: 24px 20px !important; gap: 20px !important; }
+
+    .site-footer { padding: 40px 20px 32px !important; }
+  }
 </style>
 </helmet>
 <div ref="{{ navMenuRef }}" style="position: fixed; top: 47px; left: 50%; transform: translateX(-50%); width: min(452px, 92vw); height: 44px; border-radius: 12px; background: rgba(247,247,247,0.25); backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3); border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 14px; opacity: 0; pointer-events: none; z-index: 999;">
@@ -31,20 +68,20 @@
     <div ref="{{ bgRef }}" style="position: absolute; inset: 0; z-index: 0; opacity: 0; background: linear-gradient(180.713deg, rgb(23,23,23) 0.72%, rgb(26,31,37) 45.15%, rgb(3,10,52) 89.57%, rgb(20,52,105) 178.43%);"></div>
     <canvas ref="{{ canvasRef }}" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1;"></canvas>
 
-    <div ref="{{ heroRef }}" style="position: absolute; left: 48.9%; top: 61.4%; width: 42.2%; z-index: 5; display: flex; flex-direction: column; gap: 20px; align-items: flex-end; pointer-events: none;">
-      <div style="align-self: stretch; display: flex; flex-direction: column; gap: 3px;">
-        <span style="font-family: 'Roboto Serif', serif; font-weight: 300; font-size: clamp(15px, 1.39vw, 20px); line-height: 1.5; letter-spacing: -0.18px; text-align: right; color: rgb(225,225,225);">One brain. Every conversation</span>
-        <span style="font-family: Roboto, sans-serif; font-weight: 400; font-size: clamp(28px, 2.92vw, 42px); line-height: 1.35; letter-spacing: -1px; text-align: right; white-space: nowrap; color: rgb(232,232,232);">Your Left Brain, Reimagined</span>
+    <div ref="{{ heroRef }}" class="hero-block" style="position: absolute; left: 48.9%; top: 61.4%; width: 42.2%; z-index: 5; display: flex; flex-direction: column; gap: 20px; align-items: flex-end; pointer-events: none;">
+      <div class="hero-title-group" style="align-self: stretch; display: flex; flex-direction: column; gap: 3px;">
+        <span class="hero-kicker" style="font-family: 'Roboto Serif', serif; font-weight: 300; font-size: clamp(15px, 1.39vw, 20px); line-height: 1.5; letter-spacing: -0.18px; text-align: right; color: rgb(225,225,225);">One brain. Every conversation</span>
+        <span class="hero-title" style="font-family: Roboto, sans-serif; font-weight: 400; font-size: clamp(28px, 2.92vw, 42px); line-height: 1.35; letter-spacing: -1px; text-align: right; white-space: nowrap; color: rgb(232,232,232);">Your Left Brain, Reimagined</span>
       </div>
-      <div ref="{{ heroCtaRef }}" style="width: 312px; max-width: 100%; height: 44px; border-radius: 12px; background: rgba(170,172,176,0.43); display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; cursor: pointer; pointer-events: auto;">
+      <div ref="{{ heroCtaRef }}" class="hero-cta" style="width: 312px; max-width: 100%; height: 44px; border-radius: 12px; background: rgba(170,172,176,0.43); display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; cursor: pointer; pointer-events: auto;">
         <span style="font-family: Inter, sans-serif; font-size: 14px; letter-spacing: 0.12px; color: rgb(232,232,232);">Products</span>
         <span style="width: 28px; height: 28px; border-radius: 26px; background: rgb(148,148,148); display: flex; align-items: center; justify-content: center; color: rgb(255,255,255);"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="display:block;"><g transform="rotate(90 10 10) translate(4.359 2.709)"><path d="M 5.199 0.183 C 5.316 0.066 5.475 0 5.641 0 C 5.806 0 5.965 0.066 6.082 0.183 L 11.082 5.183 C 11.144 5.24 11.193 5.309 11.227 5.386 C 11.261 5.462 11.28 5.545 11.281 5.629 C 11.283 5.713 11.267 5.796 11.236 5.874 C 11.204 5.952 11.157 6.023 11.098 6.082 C 11.039 6.141 10.968 6.188 10.89 6.22 C 10.812 6.251 10.729 6.266 10.645 6.265 C 10.561 6.263 10.478 6.245 10.402 6.211 C 10.325 6.177 10.256 6.128 10.199 6.066 L 6.266 2.133 L 6.266 13.958 C 6.266 14.124 6.2 14.283 6.083 14.4 C 5.965 14.517 5.806 14.583 5.641 14.583 C 5.475 14.583 5.316 14.517 5.199 14.4 C 5.081 14.283 5.016 14.124 5.016 13.958 L 5.016 2.133 L 1.082 6.066 C 1.025 6.128 0.956 6.177 0.879 6.211 C 0.803 6.245 0.72 6.263 0.636 6.265 C 0.552 6.266 0.469 6.251 0.391 6.22 C 0.313 6.188 0.242 6.141 0.183 6.082 C 0.124 6.023 0.077 5.952 0.045 5.874 C 0.014 5.796 -0.001 5.713 0 5.629 C 0.002 5.545 0.02 5.462 0.054 5.386 C 0.088 5.309 0.138 5.24 0.199 5.183 L 5.199 0.183 Z" fill="currentColor" fill-rule="evenodd"></path></g></svg></span>
       </div>
     </div>
 
-    <p ref="{{ introRef }}" style="position: absolute; left: 50%; top: 132px; transform: translateX(-50%); width: min(566px, 84vw); text-align: center; font-family: Roboto, sans-serif; color: rgb(177,177,177); opacity: 0; z-index: 5; margin: 0; pointer-events: none; font-size: clamp(15px, 1.39vw, 20px); line-height: 26px; letter-spacing: -1px;">ViH Metaverse is a state-of-the-art customer experience ecosystem that connects enterprises with their customers at every touchpoint — delivering unparalleled experiences from first contact to lasting loyalty. Our ecosystem leverages AI to redefine how enterprises understand, engage, and serve their customers — through and through.</p>
+    <p ref="{{ introRef }}" class="intro-text" style="position: absolute; left: 50%; top: 132px; transform: translateX(-50%); width: min(566px, 84vw); text-align: center; font-family: Roboto, sans-serif; color: rgb(177,177,177); opacity: 0; z-index: 5; margin: 0; pointer-events: none; font-size: clamp(15px, 1.39vw, 20px); line-height: 26px; letter-spacing: -1px;">ViH Metaverse is a state-of-the-art customer experience ecosystem that connects enterprises with their customers at every touchpoint — delivering unparalleled experiences from first contact to lasting loyalty. Our ecosystem leverages AI to redefine how enterprises understand, engage, and serve their customers — through and through.</p>
 
-    <div ref="{{ cardRef }}" style="position: absolute; right: 5.4%; top: 112px; bottom: 44px; width: min(420px, 33vw); opacity: 0; pointer-events: none; z-index: 8; display: flex; flex-direction: column; justify-content: center; gap: 16px;">
+    <div ref="{{ cardRef }}" class="product-card" style="position: absolute; right: 5.4%; top: 112px; bottom: 44px; width: min(420px, 33vw); opacity: 0; pointer-events: none; z-index: 8; display: flex; flex-direction: column; justify-content: center; gap: 16px;">
       <div style="border-radius: 24px; background: linear-gradient(155deg, rgba(255,255,255,0.14) 0%, rgba(122,123,127,0.30) 45%, rgba(20,52,105,0.28) 100%); backdrop-filter: blur(24px) saturate(1.3); -webkit-backdrop-filter: blur(24px) saturate(1.3); border: 1px solid rgba(255,255,255,0.22); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 0 40px rgba(255,255,255,0.04), 0 20px 40px rgba(0,0,0,0.25); padding: 22px 20px 18px; flex: 0 1 auto; min-height: 0; overflow: hidden;">
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <span ref="{{ cardTitleRef }}" style="font-family: Roboto, sans-serif; font-size: 24px; color: rgb(255,255,255);">ViH Prana</span>
@@ -76,7 +113,7 @@
 
 <div ref="{{ cccTrackRef }}" style="position: relative; background: linear-gradient(0deg, rgb(0,0,0) 40.7%, rgb(0,0,0) 66.77%, rgb(3,12,50) 99.86%, rgb(4,13,56) 145%); height: 360vh;">
   <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <div ref="{{ lettersRowRef }}" style="position: relative; display: flex; gap: clamp(6px, 1.94vw, 28px); font-family: 'Roboto Condensed', Roboto, sans-serif; font-weight: 600; font-size: clamp(96px, 19.2vw, 276px); line-height: 0.24; white-space: nowrap;">
+    <div ref="{{ lettersRowRef }}" class="letters-row" style="position: relative; display: flex; gap: clamp(6px, 1.94vw, 28px); font-family: 'Roboto Condensed', Roboto, sans-serif; font-weight: 600; font-size: clamp(96px, 19.2vw, 276px); line-height: 0.24; white-space: nowrap;">
       <span style="color: rgb(255,255,255); transition: color .4s ease;">C</span>
       <span style="color: rgb(51,51,51); transition: color .4s ease;">c</span>
       <span style="color: rgb(51,51,51); transition: color .4s ease;">C</span>
@@ -84,19 +121,19 @@
       <span style="color: rgb(51,51,51); transition: color .4s ease;">A</span>
       <span style="color: rgb(51,51,51); transition: color .4s ease;">a</span>
     </div>
-    <div ref="{{ captionRef }}" style="position: absolute; left: 50%; top: 76%; width: min(523px, 80vw); transform: translateX(-50%); text-align: left; font-family: Roboto, sans-serif; font-weight: 400; font-size: 20px; line-height: 33px; letter-spacing: -1px;">
+    <div ref="{{ captionRef }}" class="ccc-caption" style="position: absolute; left: 50%; top: 76%; width: min(523px, 80vw); transform: translateX(-50%); text-align: left; font-family: Roboto, sans-serif; font-weight: 400; font-size: 20px; line-height: 33px; letter-spacing: -1px;">
       <span ref="{{ capLabelRef }}" style="color: rgb(255,255,255); font-weight: 600;">Capture Content : </span><span ref="{{ capBodyRef }}" style="color: #dddddd; font-weight: 400;">Collect messages, emails, calls, meetings, documents, and tickets from every communication channel.</span>
     </div>
   </div>
 </div>
 
-<section style="position: relative; overflow: hidden; background: radial-gradient(140% 120% at 20% -10%, rgba(35,80,180,0.4) 0%, rgba(14,28,64,0.55) 35%, rgba(6,10,22,0.85) 65%, rgba(3,6,14,1) 100%); padding: 160px 24px 120px;">
+<section class="proof-section" style="position: relative; overflow: hidden; background: radial-gradient(140% 120% at 20% -10%, rgba(35,80,180,0.4) 0%, rgba(14,28,64,0.55) 35%, rgba(6,10,22,0.85) 65%, rgba(3,6,14,1) 100%); padding: 160px 24px 120px;">
   <div style="position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; mix-blend-mode: overlay; background-image: url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>&quot;);"></div>
-  <div style="position: relative; max-width: 1208px; margin: 0 auto; display: flex; flex-direction: column; gap: 144px;">
-    <div style="display: flex; flex-direction: column; gap: 75px; align-items: flex-end;">
+  <div class="proof-wrap" style="position: relative; max-width: 1208px; margin: 0 auto; display: flex; flex-direction: column; gap: 144px;">
+    <div class="proof-inner" style="display: flex; flex-direction: column; gap: 75px; align-items: flex-end;">
     <h2 style="align-self: stretch; max-width: 1181px; font-family: Roboto, sans-serif; font-weight: 400; font-size: clamp(24px, 2.22vw, 32px); line-height: 1.5; letter-spacing: -1px; color: rgb(232,232,232); margin: 0;">We’re proud to partner with industry leaders and global innovators here’s what they’re saying about working with ViH Metaverse</h2>
-    <div style="position: relative; overflow: hidden; width: min(756px, 100%); border-radius: 18px; background: radial-gradient(60% 80% at 15% 10%, rgba(70,120,220,0.16) 0%, rgba(23,23,23,0) 60%), rgba(15,15,15,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 18px 42px rgba(0,0,0,0.35); backdrop-filter: blur(22px) saturate(1.3); -webkit-backdrop-filter: blur(22px) saturate(1.3); padding: 24px 45px; display: flex; gap: 32px; align-items: flex-start; justify-content: space-between;">
-      <div style="flex-shrink: 0; width: 161px; display: flex; flex-direction: column; align-items: flex-start; gap: 24px;">
+    <div class="testimonial-card" style="position: relative; overflow: hidden; width: min(756px, 100%); border-radius: 18px; background: radial-gradient(60% 80% at 15% 10%, rgba(70,120,220,0.16) 0%, rgba(23,23,23,0) 60%), rgba(15,15,15,0.85); border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 18px 42px rgba(0,0,0,0.35); backdrop-filter: blur(22px) saturate(1.3); -webkit-backdrop-filter: blur(22px) saturate(1.3); padding: 24px 45px; display: flex; gap: 32px; align-items: flex-start; justify-content: space-between;">
+      <div class="testimonial-side" style="flex-shrink: 0; width: 161px; display: flex; flex-direction: column; align-items: flex-start; gap: 24px;">
         <svg width="80" height="80" viewBox="0 0 24 24" fill="rgb(177,91,252)"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"></path></svg>
         <div style="text-align: left;">
           <div style="font-family: 'Roboto Mono', monospace; font-size: 18px; line-height: 41px; letter-spacing: -1px; color: rgb(232,232,232);">Mukesh Ambani</div>
@@ -111,13 +148,13 @@
     </div>
     </div>
     <div style="padding: 8px 20px; display: flex; flex-direction: column; gap: 40px;">
-      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; min-height: 106px;">
+      <div class="logo-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; min-height: 106px;">
         <img src="images/logo-star.png" alt="Star Health Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; height: 84px; width: auto; object-fit: contain;">
         <img src="images/logo-chola.png" alt="Chola" style="filter: brightness(0) invert(1); opacity: 0.92; height: 68px; width: auto; object-fit: contain;">
         <img src="images/logo-jgi.png" alt="JGI Jain Deemed-to-be University" style="filter: brightness(0) invert(1); opacity: 0.92; height: 44px; width: auto; object-fit: contain;">
         <img src="images/logo-kapston.png" alt="Kapston Services Limited" style="filter: brightness(0) invert(1); opacity: 0.92; height: 62px; width: auto; object-fit: contain;">
       </div>
-      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; min-height: 87px;">
+      <div class="logo-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; min-height: 87px;">
         <img src="images/logo-tataplay.png" alt="Tata Play Fiber" style="filter: brightness(0) invert(1); opacity: 0.92; height: 66px; width: auto; object-fit: contain;">
         <img src="images/logo-smc.png" alt="SMC Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; height: 52px; width: auto; object-fit: contain;">
         <img src="images/logo-bsnl.png" alt="BSNL" style="filter: brightness(0) invert(1); opacity: 0.92; height: 74px; width: auto; object-fit: contain;">
@@ -130,7 +167,7 @@
 <section ref="{{ contactSectionRef }}" style="position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: center; background: rgba(0,0,0,0.2), radial-gradient(150% 140% at 50% 160%, rgba(45,105,225,0.55) 0%, rgba(18,40,90,0.5) 40%, rgba(6,10,22,0.75) 70%, rgba(3,6,14,0.95) 100%); padding: 40px 24px;">
   <div style="position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; mix-blend-mode: overlay; background-image: url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>&quot;);"></div>
   <div style="position: absolute; right: -220px; bottom: -260px; width: 900px; height: 900px; max-width: 90vw; max-height: 90vw; border-radius: 50%; pointer-events: none; z-index: 0; background: radial-gradient(circle at 35% 30%, rgba(110,165,255,0.55) 0%, rgba(55,105,220,0.35) 35%, rgba(20,45,110,0.12) 60%, transparent 75%); filter: blur(10px);"></div>
-  <div style="position: relative; overflow: hidden; max-width: 1208px; margin: 0 auto; width: 100%; border-radius: 24px; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 30%), rgba(10,10,10,0.82); border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 90px rgba(90,140,255,0.05), 0 26px 54px rgba(0,0,0,0.4); backdrop-filter: blur(24px) saturate(1.15); -webkit-backdrop-filter: blur(24px) saturate(1.15); padding: 28px 40px; display: grid; grid-template-columns: 1fr minmax(0, 560px); gap: 24px; align-items: start;">
+  <div class="contact-card" style="position: relative; overflow: hidden; max-width: 1208px; margin: 0 auto; width: 100%; border-radius: 24px; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 30%), rgba(10,10,10,0.82); border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 90px rgba(90,140,255,0.05), 0 26px 54px rgba(0,0,0,0.4); backdrop-filter: blur(24px) saturate(1.15); -webkit-backdrop-filter: blur(24px) saturate(1.15); padding: 28px 40px; display: grid; grid-template-columns: 1fr minmax(0, 560px); gap: 24px; align-items: start;">
     <h2 style="font-family: 'Roboto Mono', monospace; font-weight: 400; font-size: clamp(20px, 1.8vw, 28px); line-height: 1.3; letter-spacing: -1px; white-space: nowrap; color: rgb(232,232,232); margin: 0;">Get in touch</h2>
     <form style="display: flex; flex-direction: column; gap: 18px;" onsubmit="{{ onSubmit }}">
       <label style="display: flex; flex-direction: column; gap: 6px;">
@@ -157,7 +194,7 @@
   </div>
 </section>
 
-<footer style="position: relative; overflow: hidden; background: rgba(0,0,0,0.2), radial-gradient(160% 200% at 50% 30%, rgba(50,115,235,0.6) 0%, rgba(24,55,120,0.55) 40%, rgba(9,16,32,0.6) 75%, rgba(3,6,14,0.85) 100%); padding: 56px 24px 48px;">
+<footer class="site-footer" style="position: relative; overflow: hidden; background: rgba(0,0,0,0.2), radial-gradient(160% 200% at 50% 30%, rgba(50,115,235,0.6) 0%, rgba(24,55,120,0.55) 40%, rgba(9,16,32,0.6) 75%, rgba(3,6,14,0.85) 100%); padding: 56px 24px 48px;">
   <div style="max-width: 1208px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 32px;">
     <div style="width: min(608px, 100%); font-family: 'Roboto Mono', monospace; font-weight: 400; font-size: clamp(24px, 2.22vw, 32px); line-height: 53px; text-align: center; letter-spacing: -1px; color: rgb(232,232,232);">Communication Intelligence, Reimagined.</div>
     <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
@@ -437,9 +474,35 @@ class Component extends DCLogic {
         }
       }
     };
+    const onTouchMove = (e) => {
+      const touch = e.touches && e.touches[0];
+      if (!touch) return;
+      const r = canvas.getBoundingClientRect();
+      const mx = touch.clientX - r.left, my = touch.clientY - r.top;
+      const blocked = this._inHeroZone(mx, my) && heroFadeNow() > 0.35;
+      if (blocked) { mouse.active = false; mouse.x = -9999; mouse.y = -9999; return; }
+      mouse.x = mx; mouse.y = my; mouse.active = true;
+    };
+    const onTouchEnd = (e) => {
+      const touch = e.changedTouches && e.changedTouches[0];
+      if (touch) {
+        const r = canvas.getBoundingClientRect();
+        const mx = touch.clientX - r.left, my = touch.clientY - r.top;
+        for (const L of this._labelHits) {
+          if (mx >= L.x && mx <= L.x + L.w && my >= L.y - L.h / 2 && my <= L.y + L.h / 2) {
+            this._hoveredProduct = L.i;
+            this.openProduct(L.i);
+            break;
+          }
+        }
+      }
+      mouse.active = false; mouse.x = -9999; mouse.y = -9999; this._hoveredProduct = null;
+    };
     canvas.addEventListener('mousemove', onMove);
     canvas.addEventListener('mouseleave', onLeave);
     canvas.addEventListener('click', onClick);
+    canvas.addEventListener('touchmove', onTouchMove, { passive: true });
+    canvas.addEventListener('touchend', onTouchEnd, { passive: true });
     const goProducts = () => {
       const tr = this._track;
       if (!tr) return;
@@ -453,6 +516,8 @@ class Component extends DCLogic {
       canvas.removeEventListener('mousemove', onMove);
       canvas.removeEventListener('mouseleave', onLeave);
       canvas.removeEventListener('click', onClick);
+      canvas.removeEventListener('touchmove', onTouchMove);
+      canvas.removeEventListener('touchend', onTouchEnd);
     };
 
     const roundRect = (c, x, y, w, h, r) => {
