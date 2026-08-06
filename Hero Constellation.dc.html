@@ -135,7 +135,7 @@
 <div class="mobile-hero-page" style="position: relative; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; background: linear-gradient(180deg, rgb(23,23,23) 0%, rgb(26,31,37) 43.26%, rgb(23,24,24) 100%); font-family: Inter, sans-serif;">
   <canvas ref="{{ mobileFieldCanvasRef }}" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1;"></canvas>
   <div ref="{{ mobileHubLabelRef }}" style="position: absolute; top: 0; left: 0; z-index: 4; pointer-events: none; opacity: 0; display: flex; gap: 6px; white-space: nowrap;"></div>
-  <div ref="{{ heroRef }}" style="position: absolute; left: 50%; bottom: 130px; transform: translateX(-50%); width: 88vw; z-index: 5; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;">
+  <div ref="{{ heroRef }}" style="position: absolute; left: 50%; top: 58%; transform: translate(-50%, -50%); width: 88vw; z-index: 5; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;">
     <div style="display: flex; flex-direction: column; gap: 4px;">
       <span style="font-family: 'Roboto Serif', serif; font-weight: 300; font-size: 14px; line-height: 1.5; letter-spacing: -0.18px; color: rgb(225,225,225);">One brain. Every conversation</span>
       <span style="font-family: Roboto, sans-serif; font-weight: 400; font-size: clamp(24px, 7.5vw, 34px); line-height: 1.25; letter-spacing: -1px; color: rgb(232,232,232);">Your Left Brain, Reimagined</span>
@@ -644,9 +644,9 @@ class Component extends DCLogic {
       const rect = canvas.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > window.innerHeight) return;
       t += 1;
-      // one full lap roughly every ~5s at 60fps — a lively, continuous
+      // one full lap roughly every ~7s at 60fps — a lively, continuous
       // auto-orbit since this canvas never receives touch/mouse input
-      angle += 0.021;
+      angle += 0.015;
       ctx.clearRect(0, 0, W, H);
       if (!this._mobileHeroZone) computeHeroZone();
 
@@ -663,12 +663,12 @@ class Component extends DCLogic {
         d.y = d.hy + Math.sin(t * 0.009 + d.ph) * 6;
       }
 
-      const cx = W * 0.5, cy = H * 0.44;
-      const Rx = W * 0.33, Ry = H * 0.21;
+      const cx = W * 0.5, cy = H * 0.5;
+      const Rx = W * 0.44, Ry = H * 0.42;
       const hubX = cx + Math.cos(angle) * Rx;
       const hubY = cy + Math.sin(angle) * Ry;
 
-      const dropR = 220, joinR = 190, minSep = 80;
+      const dropR = 300, joinR = 260, minSep = 110;
       for (const d of [...revealed]) {
         if (Math.hypot(d.x - hubX, d.y - hubY) > dropR) revealed.delete(d);
       }
@@ -713,6 +713,16 @@ class Component extends DCLogic {
       const focus = neigh.length ? neigh[0].d : null;
 
       if (revealed.size && !hubBlocked) {
+        ctx.save();
+        // clip out the hero-text rectangle so connector lines never cross
+        // through the title/CTA now that it sits mid-orbit
+        ctx.beginPath();
+        ctx.rect(0, 0, W, H);
+        if (this._mobileHeroZone) {
+          const z = this._mobileHeroZone;
+          ctx.rect(z.x, z.y, z.w, z.h);
+        }
+        ctx.clip('evenodd');
         ctx.lineWidth = 1;
         for (const r of revealed) {
           const strength = 0.5 * r.a;
@@ -720,6 +730,7 @@ class Component extends DCLogic {
           ctx.strokeStyle = 'rgba(' + DOT + ',' + strength.toFixed(3) + ')';
           ctx.beginPath(); ctx.moveTo(hubX, hubY); ctx.lineTo(r.x, r.y); ctx.stroke();
         }
+        ctx.restore();
       }
 
       // hub label — a real DOM element (not canvas) so it can use genuine
@@ -746,16 +757,24 @@ class Component extends DCLogic {
 
       // small image tiles for the revealed nodes — auto-shown, never touch-driven
       if (!hubBlocked) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, W, H);
+        if (this._mobileHeroZone) {
+          const z = this._mobileHeroZone;
+          ctx.rect(z.x, z.y, z.w, z.h);
+        }
+        ctx.clip('evenodd');
         ctx.textBaseline = 'middle';
         for (const d of field) {
           if (d.a <= 0.02) continue;
           if (inZone(d.x, d.y)) continue;
           const a = d.a;
           const side = d.x < W * 0.55 ? 1 : -1;
-          const connectorLen = 46;
+          const connectorLen = 56;
           const tile = this._tiles[d.curImg ?? d.img];
-          const w = 34 * (0.82 + d.a * 0.12), h = w * tileAR(tile);
-          const cardX = d.x + side * (connectorLen + 20);
+          const w = 50 * (0.82 + d.a * 0.12), h = w * tileAR(tile);
+          const cardX = d.x + side * (connectorLen + 24);
           const cardY = d.y + 2;
           const ix = side > 0 ? cardX : cardX - w;
           const iy = cardY - h / 2;
@@ -776,6 +795,7 @@ class Component extends DCLogic {
           if (tile && tile.complete && tile.naturalWidth) ctx.drawImage(tile._scaled || tile, ix, iy, w, h);
           ctx.restore();
         }
+        ctx.restore();
       }
     };
     this._mobileFieldLastFrame = performance.now();
