@@ -717,13 +717,23 @@ class Component extends DCLogic {
         ctx.fill();
       }
 
-      const hubBlocked = inZone(hubX, hubY);
+      // Rather than a hard on/off when the hub passes behind the hero text
+      // (which read as the animation abruptly cutting out twice per lap),
+      // fade the reveal smoothly in/out based on the hub's distance to the
+      // text's rectangle — the orbit shape itself is untouched.
+      const heroZoneNow = this._mobileHeroZone;
+      let hubZoneFade = 1;
+      if (heroZoneNow) {
+        const zdx = Math.max(heroZoneNow.x - hubX, 0, hubX - (heroZoneNow.x + heroZoneNow.w));
+        const zdy = Math.max(heroZoneNow.y - hubY, 0, hubY - (heroZoneNow.y + heroZoneNow.h));
+        hubZoneFade = ss(0, 70, Math.hypot(zdx, zdy));
+      }
       const neigh = [...revealed]
         .map(d => ({ d, dist: Math.hypot(d.x - hubX, d.y - hubY) }))
         .sort((a, b) => a.dist - b.dist);
       const focus = neigh.length ? neigh[0].d : null;
 
-      if (revealed.size && !hubBlocked) {
+      if (revealed.size && hubZoneFade > 0.01) {
         ctx.save();
         // clip out the hero-text rectangle so connector lines never cross
         // through the title/CTA now that it sits mid-orbit
@@ -736,7 +746,7 @@ class Component extends DCLogic {
         ctx.clip('evenodd');
         ctx.lineWidth = 1;
         for (const r of revealed) {
-          const strength = 0.5 * r.a;
+          const strength = 0.5 * r.a * hubZoneFade;
           if (strength < 0.01) continue;
           ctx.strokeStyle = 'rgba(' + DOT + ',' + strength.toFixed(3) + ')';
           ctx.beginPath(); ctx.moveTo(hubX, hubY); ctx.lineTo(r.x, r.y); ctx.stroke();
@@ -747,10 +757,10 @@ class Component extends DCLogic {
       // hub label — a real DOM element (not canvas) so it can use genuine
       // backdrop-filter glass blur, anchored at the hub dot and extending
       // to the right of it, matching the kunuminst.org reference
-      const hubA = Math.min(1, [...revealed].reduce((m, r) => Math.max(m, r.a), 0));
+      const hubA = Math.min(1, [...revealed].reduce((m, r) => Math.max(m, r.a), 0)) * hubZoneFade;
       const label = this._mobileHubLabel;
       if (label) {
-        if (hubA > 0.02 && focus && !hubBlocked) {
+        if (hubA > 0.02 && focus) {
           const hubWords = (focus.words || ['Explore']).slice(0, 2);
           const sig = hubWords.join('|');
           if (this._mobileHubLabelSig !== sig) {
@@ -767,7 +777,7 @@ class Component extends DCLogic {
       }
 
       // small image tiles for the revealed nodes — auto-shown, never touch-driven
-      if (!hubBlocked) {
+      {
         ctx.save();
         ctx.beginPath();
         ctx.rect(0, 0, W, H);
@@ -780,7 +790,8 @@ class Component extends DCLogic {
         for (const d of field) {
           if (d.a <= 0.02) continue;
           if (inZone(d.x, d.y)) continue;
-          const a = d.a;
+          const a = d.a * hubZoneFade;
+          if (a <= 0.02) continue;
           const side = d.x < W * 0.55 ? 1 : -1;
           const connectorLen = 56;
           const tile = this._tiles[d.curImg ?? d.img];
