@@ -39,13 +39,24 @@
     }
 
     .letters-row { font-size: 95px !important; gap: 9.64px !important; line-height: 22px !important; }
-    .ccc-caption { width: min(361px, 88vw) !important; font-size: 15px !important; line-height: 1.5 !important; }
+    .ccc-caption {
+      position: static !important;
+      left: auto !important;
+      top: auto !important;
+      transform: none !important;
+      margin-top: 24px !important;
+      width: min(361px, 88vw) !important;
+      font-size: 15px !important;
+      line-height: 1.5 !important;
+    }
 
     .proof-section { padding: 90px 16px 70px !important; }
     .proof-wrap { gap: 60px !important; }
     .proof-inner { align-items: center !important; gap: 32px !important; }
-    .testimonial-card { flex-direction: column !important; padding: 24px 20px !important; gap: 20px !important; }
+    .testimonial-card { flex-direction: column !important; padding: 24px 20px !important; gap: 20px !important; border-width: 1.5px !important; border-color: rgba(255,255,255,0.22) !important; }
     .testimonial-side { flex-direction: row !important; align-items: center !important; justify-content: space-between !important; width: 100% !important; gap: 16px !important; }
+    .testimonial-name { font-size: 14px !important; line-height: 22px !important; }
+    .testimonial-quote { font-size: 15px !important; line-height: 1.5 !important; }
 
     .logos-desktop { display: none !important; }
     .logos-mobile { display: flex !important; }
@@ -209,15 +220,15 @@
       <div class="testimonial-side" style="flex-shrink: 0; width: 161px; display: flex; flex-direction: column; align-items: flex-start; gap: 24px;">
         <svg width="80" height="80" viewBox="0 0 24 24" fill="rgb(177,91,252)"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"></path></svg>
         <div style="text-align: left;">
-          <div style="font-family: 'Roboto Mono', monospace; font-size: 18px; line-height: 41px; letter-spacing: -1px; color: rgb(232,232,232);">Mukesh Ambani</div>
-          <div style="font-family: 'Roboto Mono', monospace; font-size: 18px; line-height: 41px; letter-spacing: -1px; color: rgb(232,232,232);">Chairman of RIL</div>
+          <div class="testimonial-name" style="font-family: 'Roboto Mono', monospace; font-size: 18px; line-height: 41px; letter-spacing: -1px; color: rgb(232,232,232);">Mukesh Ambani</div>
+          <div class="testimonial-name" style="font-family: 'Roboto Mono', monospace; font-size: 18px; line-height: 41px; letter-spacing: -1px; color: rgb(232,232,232);">Chairman of RIL</div>
         </div>
         <div style="display: flex; gap: 13px;">
           <span style="width: 32px; height: 32px; border-radius: 26px; background: rgba(191,191,191,0.25); display: flex; align-items: center; justify-content: center; color: rgb(255,255,255); cursor: pointer;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="display:block;"><g transform="rotate(-90 10 10) translate(4.359 2.709)"><path d="M 5.199 0.183 C 5.316 0.066 5.475 0 5.641 0 C 5.806 0 5.965 0.066 6.082 0.183 L 11.082 5.183 C 11.144 5.24 11.193 5.309 11.227 5.386 C 11.261 5.462 11.28 5.545 11.281 5.629 C 11.283 5.713 11.267 5.796 11.236 5.874 C 11.204 5.952 11.157 6.023 11.098 6.082 C 11.039 6.141 10.968 6.188 10.89 6.22 C 10.812 6.251 10.729 6.266 10.645 6.265 C 10.561 6.263 10.478 6.245 10.402 6.211 C 10.325 6.177 10.256 6.128 10.199 6.066 L 6.266 2.133 L 6.266 13.958 C 6.266 14.124 6.2 14.283 6.083 14.4 C 5.965 14.517 5.806 14.583 5.641 14.583 C 5.475 14.583 5.316 14.517 5.199 14.4 C 5.081 14.283 5.016 14.124 5.016 13.958 L 5.016 2.133 L 1.082 6.066 C 1.025 6.128 0.956 6.177 0.879 6.211 C 0.803 6.245 0.72 6.263 0.636 6.265 C 0.552 6.266 0.469 6.251 0.391 6.22 C 0.313 6.188 0.242 6.141 0.183 6.082 C 0.124 6.023 0.077 5.952 0.045 5.874 C 0.014 5.796 -0.001 5.713 0 5.629 C 0.002 5.545 0.02 5.462 0.054 5.386 C 0.088 5.309 0.138 5.24 0.199 5.183 L 5.199 0.183 Z" fill="currentColor" fill-rule="evenodd"></path></g></svg></span>
           <span style="width: 32px; height: 32px; border-radius: 26px; background: rgba(191,191,191,0.25); display: flex; align-items: center; justify-content: center; color: rgb(255,255,255); cursor: pointer;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="display:block;"><g transform="rotate(90 10 10) translate(4.359 2.709)"><path d="M 5.199 0.183 C 5.316 0.066 5.475 0 5.641 0 C 5.806 0 5.965 0.066 6.082 0.183 L 11.082 5.183 C 11.144 5.24 11.193 5.309 11.227 5.386 C 11.261 5.462 11.28 5.545 11.281 5.629 C 11.283 5.713 11.267 5.796 11.236 5.874 C 11.204 5.952 11.157 6.023 11.098 6.082 C 11.039 6.141 10.968 6.188 10.89 6.22 C 10.812 6.251 10.729 6.266 10.645 6.265 C 10.561 6.263 10.478 6.245 10.402 6.211 C 10.325 6.177 10.256 6.128 10.199 6.066 L 6.266 2.133 L 6.266 13.958 C 6.266 14.124 6.2 14.283 6.083 14.4 C 5.965 14.517 5.806 14.583 5.641 14.583 C 5.475 14.583 5.316 14.517 5.199 14.4 C 5.081 14.283 5.016 14.124 5.016 13.958 L 5.016 2.133 L 1.082 6.066 C 1.025 6.128 0.956 6.177 0.879 6.211 C 0.803 6.245 0.72 6.263 0.636 6.265 C 0.552 6.266 0.469 6.251 0.391 6.22 C 0.313 6.188 0.242 6.141 0.183 6.082 C 0.124 6.023 0.077 5.952 0.045 5.874 C 0.014 5.796 -0.001 5.713 0 5.629 C 0.002 5.545 0.02 5.462 0.054 5.386 C 0.088 5.309 0.138 5.24 0.199 5.183 L 5.199 0.183 Z" fill="currentColor" fill-rule="evenodd"></path></g></svg></span>
         </div>
       </div>
-      <p style="width: min(476px, 100%); text-align: center; font-family: Roboto, sans-serif; font-size: clamp(17px, 1.67vw, 24px); line-height: 1.375; letter-spacing: -1px; color: rgb(230,230,230); margin: 0">ViH’s integration of the Reliance Research Suite was simple, enjoyable, and impactful. Their team has a deep technical understanding and knows the AI market inside out, which made the entire process smooth and fun.</p>
+      <p class="testimonial-quote" style="width: min(476px, 100%); text-align: center; font-family: Roboto, sans-serif; font-size: clamp(17px, 1.67vw, 24px); line-height: 1.375; letter-spacing: -1px; color: rgb(230,230,230); margin: 0">ViH’s integration of the Reliance Research Suite was simple, enjoyable, and impactful. Their team has a deep technical understanding and knows the AI market inside out, which made the entire process smooth and fun.</p>
     </div>
     </div>
     <div style="padding: 8px 20px; display: flex; flex-direction: column; gap: 40px;">
@@ -644,9 +655,9 @@ class Component extends DCLogic {
       const rect = canvas.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > window.innerHeight) return;
       t += 1;
-      // one full lap roughly every ~7s at 60fps — a lively, continuous
+      // one full lap roughly every ~14s at 60fps — a lively, continuous
       // auto-orbit since this canvas never receives touch/mouse input
-      angle += 0.015;
+      angle += 0.0075;
       ctx.clearRect(0, 0, W, H);
       if (!this._mobileHeroZone) computeHeroZone();
 
