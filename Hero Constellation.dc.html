@@ -38,21 +38,29 @@
       width: min(320px, 88vw) !important;
     }
 
-    .letters-row { font-size: clamp(40px, 15vw, 96px) !important; gap: 2vw !important; }
-    .ccc-caption { width: 88vw !important; font-size: 15px !important; line-height: 1.5 !important; }
+    .letters-row { font-size: 95px !important; gap: 9.64px !important; line-height: 22px !important; }
+    .ccc-caption { width: min(361px, 88vw) !important; font-size: 15px !important; line-height: 1.5 !important; }
 
     .proof-section { padding: 90px 16px 70px !important; }
     .proof-wrap { gap: 60px !important; }
     .proof-inner { align-items: center !important; gap: 32px !important; }
     .testimonial-card { flex-direction: column !important; padding: 24px 20px !important; gap: 20px !important; }
     .testimonial-side { flex-direction: row !important; align-items: center !important; justify-content: space-between !important; width: 100% !important; gap: 16px !important; }
-    .logo-row { justify-content: center !important; gap: 24px !important; min-height: auto !important; }
-    .logo-row img { height: 40px !important; }
+
+    .logos-desktop { display: none !important; }
+    .logos-mobile { display: flex !important; }
 
     .contact-card { grid-template-columns: 1fr !important; padding: 24px 20px !important; gap: 20px !important; }
 
     .site-footer { padding: 40px 20px 32px !important; }
   }
+
+  .logos-mobile { display: none; flex-direction: column; gap: 20px; }
+  .logo-marquee { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .logo-marquee::-webkit-scrollbar { display: none; }
+  .logo-marquee-track { display: flex; flex-wrap: nowrap; align-items: center; gap: 40px; width: max-content; }
+  .logo-marquee-track img { height: 40px; width: auto; flex-shrink: 0; }
+  .logo-more-mobile { text-align: center; font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 28px; letter-spacing: -1px; color: rgb(177,91,252); }
 </style>
 </helmet>
 <div ref="{{ navMenuRef }}" style="position: fixed; top: 47px; left: 50%; transform: translateX(-50%); width: min(452px, 92vw); height: 44px; border-radius: 12px; background: rgba(247,247,247,0.25); backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3); border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 14px; opacity: 0; pointer-events: none; z-index: 999;">
@@ -155,7 +163,6 @@
         <div style="height: 1px; background: rgba(179,179,179,0.8); margin: 14px 0 16px;"></div>
         <div ref="{{ cardBodyRef }}" style="font-family: Roboto, sans-serif; font-size: 13px; line-height: 17px; color: rgb(255,255,255);">Prana is the AI orchestration layer that fuses every email, call, chat, and meeting your customers leave behind into a single coherent reality — so your support, sales, and ops teams stop chasing ghosts across silos and start acting on one truth</div>
       </div>
-      <img ref="{{ cardImgRef }}" src="images/prana-visual.png" alt="ViH Prana" style="width: 100%; border-radius: 12px; display: block; height: 160px; object-fit: cover; object-position: center; background: rgb(255,255,255); flex: 0 0 auto; min-height: 0;">
     </div>
 
     <div ref="{{ ctaRef }}" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; gap: 4px; opacity: 0; z-index: 6;">
@@ -202,17 +209,41 @@
     </div>
     </div>
     <div style="padding: 8px 20px; display: flex; flex-direction: column; gap: 40px;">
-      <div class="logo-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; min-height: 106px;">
-        <img src="images/logo-star.png" alt="Star Health Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; height: 84px; width: auto; object-fit: contain;">
-        <img src="images/logo-chola.png" alt="Chola" style="filter: brightness(0) invert(1); opacity: 0.92; height: 68px; width: auto; object-fit: contain;">
-        <img src="images/logo-jgi.png" alt="JGI Jain Deemed-to-be University" style="filter: brightness(0) invert(1); opacity: 0.92; height: 44px; width: auto; object-fit: contain;">
-        <img src="images/logo-kapston.png" alt="Kapston Services Limited" style="filter: brightness(0) invert(1); opacity: 0.92; height: 62px; width: auto; object-fit: contain;">
+      <div class="logos-desktop" style="display: flex; flex-direction: column; gap: 40px;">
+        <div class="logo-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; min-height: 106px;">
+          <img src="images/logo-star.png" alt="Star Health Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; height: 84px; width: auto; object-fit: contain;">
+          <img src="images/logo-chola.png" alt="Chola" style="filter: brightness(0) invert(1); opacity: 0.92; height: 68px; width: auto; object-fit: contain;">
+          <img src="images/logo-jgi.png" alt="JGI Jain Deemed-to-be University" style="filter: brightness(0) invert(1); opacity: 0.92; height: 44px; width: auto; object-fit: contain;">
+          <img src="images/logo-kapston.png" alt="Kapston Services Limited" style="filter: brightness(0) invert(1); opacity: 0.92; height: 62px; width: auto; object-fit: contain;">
+        </div>
+        <div class="logo-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; min-height: 87px;">
+          <img src="images/logo-tataplay.png" alt="Tata Play Fiber" style="filter: brightness(0) invert(1); opacity: 0.92; height: 66px; width: auto; object-fit: contain;">
+          <img src="images/logo-smc.png" alt="SMC Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; height: 52px; width: auto; object-fit: contain;">
+          <img src="images/logo-bsnl.png" alt="BSNL" style="filter: brightness(0) invert(1); opacity: 0.92; height: 74px; width: auto; object-fit: contain;">
+          <span style="font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: clamp(26px, 2.78vw, 40px); letter-spacing: -1px; color: rgb(177,91,252);">and 100+</span>
+        </div>
       </div>
-      <div class="logo-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px; min-height: 87px;">
-        <img src="images/logo-tataplay.png" alt="Tata Play Fiber" style="filter: brightness(0) invert(1); opacity: 0.92; height: 66px; width: auto; object-fit: contain;">
-        <img src="images/logo-smc.png" alt="SMC Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; height: 52px; width: auto; object-fit: contain;">
-        <img src="images/logo-bsnl.png" alt="BSNL" style="filter: brightness(0) invert(1); opacity: 0.92; height: 74px; width: auto; object-fit: contain;">
-        <span style="font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: clamp(26px, 2.78vw, 40px); letter-spacing: -1px; color: rgb(177,91,252);">and 100+</span>
+
+      <div class="logos-mobile">
+        <div ref="{{ logoScrollRef }}" class="logo-marquee">
+          <div class="logo-marquee-track">
+            <img src="images/logo-star.png" alt="Star Health Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-chola.png" alt="Chola" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-jgi.png" alt="JGI Jain Deemed-to-be University" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-kapston.png" alt="Kapston Services Limited" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-tataplay.png" alt="Tata Play Fiber" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-smc.png" alt="SMC Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-bsnl.png" alt="BSNL" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-star.png" alt="Star Health Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-chola.png" alt="Chola" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-jgi.png" alt="JGI Jain Deemed-to-be University" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-kapston.png" alt="Kapston Services Limited" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-tataplay.png" alt="Tata Play Fiber" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-smc.png" alt="SMC Insurance" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+            <img src="images/logo-bsnl.png" alt="BSNL" style="filter: brightness(0) invert(1); opacity: 0.92; object-fit: contain;">
+          </div>
+        </div>
+        <div class="logo-more-mobile">and 100+</div>
       </div>
     </div>
   </div>
@@ -404,6 +435,41 @@ class Component extends DCLogic {
       const total = Math.max(0, tr.offsetHeight - window.innerHeight);
       window.scrollTo({ top: tr.offsetTop + total * 0.86, behavior: 'smooth' });
     }
+  }
+
+  startLogoMarquee() {
+    const el = this._logoScroll;
+    if (!el || this._logoMarqueeOn) return;
+    this._logoMarqueeOn = true;
+    let paused = false;
+    // Position is tracked in this float, not read back from el.scrollLeft —
+    // browsers round scrollLeft to whole pixels, so a sub-pixel-per-frame
+    // increment (needed for a "very slow" crawl) would truncate to 0 forever
+    // if we accumulated onto the read-back value instead.
+    let pos = el.scrollLeft;
+    const onDown = () => { paused = true; };
+    const onUp = () => { setTimeout(() => { pos = el.scrollLeft; paused = false; }, 1200); };
+    el.addEventListener('touchstart', onDown, { passive: true });
+    el.addEventListener('touchend', onUp, { passive: true });
+    el.addEventListener('mousedown', onDown);
+    window.addEventListener('mouseup', onUp);
+    const loop = () => {
+      this._logoMarqueeRaf = requestAnimationFrame(loop);
+      if (paused) return;
+      const half = el.scrollWidth / 2;
+      if (half <= el.clientWidth) return;
+      pos += 0.35;
+      if (pos >= half) pos -= half;
+      el.scrollLeft = pos;
+    };
+    this._logoMarqueeRaf = requestAnimationFrame(loop);
+    this._cleanupLogoMarquee = () => {
+      cancelAnimationFrame(this._logoMarqueeRaf);
+      el.removeEventListener('touchstart', onDown);
+      el.removeEventListener('touchend', onUp);
+      el.removeEventListener('mousedown', onDown);
+      window.removeEventListener('mouseup', onUp);
+    };
   }
 
   startCccEngine() {
@@ -1339,6 +1405,7 @@ class Component extends DCLogic {
     if (this._cleanupEvents) this._cleanupEvents();
     if (this._cleanupMobileHero) this._cleanupMobileHero();
     if (this._cleanupMobileGlobe) this._cleanupMobileGlobe();
+    if (this._cleanupLogoMarquee) this._cleanupLogoMarquee();
     if (this._mq) {
       if (this._mq.removeEventListener) this._mq.removeEventListener('change', this._onMqChange);
       else this._mq.removeListener(this._onMqChange);
@@ -1361,6 +1428,7 @@ class Component extends DCLogic {
       navProductsRef: (el) => { this._navProducts = el; if (el) el.addEventListener('click', () => this.goToProducts()); },
       navContactRef: (el) => { this._navContact = el; },
       contactSectionRef: (el) => { this._contactSection = el; },
+      logoScrollRef: (el) => { this._logoScroll = el; if (el) this.startLogoMarquee(); },
       bgRef: (el) => { this._bg = el; },
       introRef: (el) => { this._intro = el; },
       ctaRef: (el) => { this._cta = el; },
