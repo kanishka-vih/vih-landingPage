@@ -53,6 +53,10 @@
     .contact-card { grid-template-columns: 1fr !important; padding: 24px 20px !important; gap: 20px !important; }
 
     .site-footer { padding: 40px 20px 32px !important; }
+
+    html { scroll-snap-type: y proximity; }
+    .mobile-hero-page { scroll-snap-align: start; scroll-snap-stop: always; }
+    .mobile-globe-track { scroll-snap-align: start; }
   }
 
   .logos-mobile { display: none; flex-direction: column; gap: 20px; }
@@ -61,6 +65,12 @@
   .logo-marquee-track { display: flex; flex-wrap: nowrap; align-items: center; gap: 40px; width: max-content; }
   .logo-marquee-track img { height: 40px; width: auto; flex-shrink: 0; }
   .logo-more-mobile { text-align: center; font-family: 'Roboto Mono', monospace; font-weight: 600; font-size: 28px; letter-spacing: -1px; color: rgb(177,91,252); }
+
+  @keyframes cardPop {
+    from { transform: translateX(-50%) scale(0.88); }
+    to { transform: translateX(-50%) scale(1); }
+  }
+  .card-pop { animation: cardPop 0.4s cubic-bezier(.2,.8,.2,1); }
 </style>
 </helmet>
 <div ref="{{ navMenuRef }}" style="position: fixed; top: 47px; left: 50%; transform: translateX(-50%); width: min(452px, 92vw); height: 44px; border-radius: 12px; background: rgba(247,247,247,0.25); backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3); border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 14px; opacity: 0; pointer-events: none; z-index: 999;">
@@ -122,7 +132,7 @@
 </sc-if>
 
 <sc-if value="{{ isMobile }}">
-<div style="position: relative; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; background: linear-gradient(180deg, rgb(23,23,23) 0%, rgb(26,31,37) 43.26%, rgb(23,24,24) 100%); font-family: Inter, sans-serif;">
+<div class="mobile-hero-page" style="position: relative; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; background: linear-gradient(180deg, rgb(23,23,23) 0%, rgb(26,31,37) 43.26%, rgb(23,24,24) 100%); font-family: Inter, sans-serif;">
   <canvas ref="{{ mobileFieldCanvasRef }}" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1;"></canvas>
   <div ref="{{ heroRef }}" style="position: absolute; left: 50%; bottom: 130px; transform: translateX(-50%); width: 88vw; z-index: 5; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;">
     <div style="display: flex; flex-direction: column; gap: 4px;">
@@ -137,7 +147,7 @@
   </div>
 </div>
 
-<div ref="{{ mobileGlobeTrackRef }}" style="position: relative; width: 100%; height: 230vh; height: 230dvh; background: rgb(23,24,24);">
+<div ref="{{ mobileGlobeTrackRef }}" class="mobile-globe-track" style="position: relative; width: 100%; height: 230vh; height: 230dvh; background: rgb(23,24,24);">
   <div style="position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; font-family: Inter, sans-serif;">
     <div style="position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgb(23,23,23) 0%, rgb(26,31,37) 43.26%, rgb(23,24,24) 100%);"></div>
     <div ref="{{ bgRef }}" style="position: absolute; inset: 0; z-index: 0; opacity: 0; background: linear-gradient(180.713deg, rgb(23,23,23) 0.72%, rgb(26,31,37) 45.15%, rgb(3,10,52) 89.57%, rgb(20,52,105) 178.43%);"></div>
@@ -404,6 +414,21 @@ class Component extends DCLogic {
     this._cccStage = -1;
   }
 
+  // Ref callbacks receive a fresh arrow function from renderVals() on every
+  // re-render, so React detaches the old ref and reattaches the new one each
+  // time — calling addEventListener unconditionally in a ref callback stacks
+  // a duplicate listener per re-render (e.g. one tap firing the handler N
+  // times). Track bound (element, event) pairs so each one only binds once.
+  bindOnce(el, event, handler) {
+    if (!el) return;
+    if (!this._boundEls) this._boundEls = new WeakMap();
+    let set = this._boundEls.get(el);
+    if (!set) { set = new Set(); this._boundEls.set(el, set); }
+    if (set.has(event)) return;
+    set.add(event);
+    el.addEventListener(event, handler);
+  }
+
   componentDidMount() {
     this._mounted = true;
     this._mq = window.matchMedia('(max-width: 760px)');
@@ -427,6 +452,30 @@ class Component extends DCLogic {
       this._bootRaf = requestAnimationFrame(boot);
     };
     boot();
+  }
+
+  bindCardSwipe(el) {
+    if (!this._boundEls) this._boundEls = new WeakMap();
+    let set = this._boundEls.get(el);
+    if (set && set.has('swipe')) return;
+    if (!set) { set = new Set(); this._boundEls.set(el, set); }
+    set.add('swipe');
+    let startX = 0, startY = 0, tracking = false;
+    const onStart = (e) => {
+      const t = e.touches ? e.touches[0] : e;
+      startX = t.clientX; startY = t.clientY; tracking = true;
+    };
+    const onEnd = (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const t = e.changedTouches ? e.changedTouches[0] : e;
+      const dx = t.clientX - startX, dy = t.clientY - startY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        this.cycleProduct(dx < 0 ? 1 : -1);
+      }
+    };
+    el.addEventListener('touchstart', onStart, { passive: true });
+    el.addEventListener('touchend', onEnd, { passive: true });
   }
 
   cycleProduct(delta) {
@@ -1398,6 +1447,11 @@ class Component extends DCLogic {
     if (this._cardSub) this._cardSub.textContent = p.sub;
     if (this._cardTag) this._cardTag.textContent = p.tag;
     if (this._cardBody) this._cardBody.textContent = p.body;
+    if (this._card && this._isMobile) {
+      this._card.classList.remove('card-pop');
+      void this._card.offsetWidth;
+      this._card.classList.add('card-pop');
+    }
   }
 
   componentWillUnmount() {
@@ -1437,21 +1491,21 @@ class Component extends DCLogic {
       mobileGlobeTrackRef: (el) => { this._mobileGlobeTrack = el; },
       mobileGlobeCanvasRef: (el) => { this._mobileGlobeCanvas = el; if (el) this.startMobileGlobeEngine(); },
       navMenuRef: (el) => { this._navMenu = el; },
-      navProductsRef: (el) => { this._navProducts = el; if (el) el.addEventListener('click', () => this.goToProducts()); },
+      navProductsRef: (el) => { this._navProducts = el; this.bindOnce(el, 'click', () => this.goToProducts()); },
       navContactRef: (el) => { this._navContact = el; },
       contactSectionRef: (el) => { this._contactSection = el; },
       logoScrollRef: (el) => { this._logoScroll = el; if (el) this.startLogoMarquee(); },
-      productPrevRef: (el) => { this._productPrev = el; if (el) el.addEventListener('click', () => this.cycleProduct(-1)); },
-      productNextRef: (el) => { this._productNext = el; if (el) el.addEventListener('click', () => this.cycleProduct(1)); },
+      productPrevRef: (el) => { this._productPrev = el; this.bindOnce(el, 'click', () => this.cycleProduct(-1)); },
+      productNextRef: (el) => { this._productNext = el; this.bindOnce(el, 'click', () => this.cycleProduct(1)); },
       bgRef: (el) => { this._bg = el; },
       introRef: (el) => { this._intro = el; },
       ctaRef: (el) => { this._cta = el; },
-      heroCtaRef: (el) => { this._heroCta = el; if (el) el.addEventListener('click', () => this.goToProducts()); },
+      heroCtaRef: (el) => { this._heroCta = el; this.bindOnce(el, 'click', () => this.goToProducts()); },
       cardImgRef: (el) => { this._cardImg = el; },
       logoRef: (el) => { this._logo = el; },
       heroRef: (el) => { this._hero = el; },
       hintRef: (el) => { this._hint = el; },
-      cardRef: (el) => { this._card = el; },
+      cardRef: (el) => { this._card = el; if (el) this.bindCardSwipe(el); },
       cardTitleRef: (el) => { this._cardTitle = el; },
       cardSubRef: (el) => { this._cardSub = el; },
       cardTagRef: (el) => { this._cardTag = el; },
