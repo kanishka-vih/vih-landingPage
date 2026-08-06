@@ -65,6 +65,10 @@
 
     .site-footer { padding: 40px 20px 32px !important; }
 
+    .nav-pill { top: 62px !important; height: 52px !important; width: min(452px, 94vw) !important; padding: 0 16px 0 18px !important; }
+    .nav-pill span { height: 32px !important; font-size: 14px !important; padding: 0 16px !important; }
+    .nav-pill img { width: 46px !important; height: 25px !important; }
+
     html { scroll-snap-type: y proximity; }
     .mobile-hero-page { scroll-snap-align: start; scroll-snap-stop: always; }
     .mobile-globe-track { scroll-snap-align: start; }
@@ -84,7 +88,7 @@
   .card-pop { animation: cardPop 0.4s cubic-bezier(.2,.8,.2,1); }
 </style>
 </helmet>
-<div ref="{{ navMenuRef }}" style="position: fixed; top: 47px; left: 50%; transform: translateX(-50%); width: min(452px, 92vw); height: 44px; border-radius: 12px; background: rgba(247,247,247,0.25); backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3); border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 14px; opacity: 0; pointer-events: none; z-index: 999;">
+<div ref="{{ navMenuRef }}" class="nav-pill" style="position: fixed; top: 47px; left: 50%; transform: translateX(-50%); width: min(452px, 92vw); height: 44px; border-radius: 12px; background: rgba(247,247,247,0.25); backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3); border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 30px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 14px; opacity: 0; pointer-events: none; z-index: 999;">
   <img ref="{{ logoRef }}" src="images/vih-logo.svg" alt="ViH Messenger" style="width: 40px; height: 22px; display: block; flex-shrink: 0;">
   <div style="display: flex; align-items: center; gap: 13px;">
     <span ref="{{ navProductsRef }}" style="height: 28px; padding: 0 14px; border-radius: 6px; background: rgb(0,0,0); display: flex; align-items: center; justify-content: center; font-family: Roboto, sans-serif; font-size: 13px; color: rgb(255,255,255); cursor: pointer; letter-spacing: 0.12px; transition: background .25s ease, color .25s ease;">Products</span>
@@ -158,11 +162,13 @@
   </div>
 </div>
 
-<div ref="{{ mobileGlobeTrackRef }}" class="mobile-globe-track" style="position: relative; width: 100%; height: 230vh; height: 230dvh; background: rgb(23,24,24);">
+<div ref="{{ mobileGlobeTrackRef }}" class="mobile-globe-track" style="position: relative; width: 100%; height: 190vh; height: 190dvh; background: rgb(23,24,24);">
   <div style="position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; font-family: Inter, sans-serif;">
     <div style="position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgb(23,23,23) 0%, rgb(26,31,37) 43.26%, rgb(23,24,24) 100%);"></div>
     <div ref="{{ bgRef }}" style="position: absolute; inset: 0; z-index: 0; opacity: 0; background: linear-gradient(180.713deg, rgb(23,23,23) 0.72%, rgb(26,31,37) 45.15%, rgb(3,10,52) 89.57%, rgb(20,52,105) 178.43%);"></div>
     <canvas ref="{{ mobileGlobeCanvasRef }}" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1;"></canvas>
+
+    <p ref="{{ globeIntroRef }}" style="position: absolute; left: 50%; top: 112px; transform: translateX(-50%); width: min(322px, 86vw); text-align: center; font-family: Roboto, sans-serif; color: rgb(177,177,177); margin: 0; z-index: 5; font-size: 14px; line-height: 20px; letter-spacing: -0.3px; pointer-events: none; opacity: 0;">A state-of-the-art customer experience ecosystem that connects enterprises with their customers at every touchpoint — delivering unparalleled experiences from first contact to lasting loyalty.</p>
 
     <div ref="{{ cardRef }}" style="position: absolute; left: 50%; top: 230px; bottom: 40px; transform: translateX(-50%); width: min(320px, 88vw); opacity: 0; pointer-events: none; z-index: 8; display: flex; flex-direction: column; justify-content: center; gap: 16px;">
       <div style="border-radius: 24px; background: linear-gradient(155deg, rgba(255,255,255,0.14) 0%, rgba(122,123,127,0.30) 45%, rgba(20,52,105,0.28) 100%); backdrop-filter: blur(24px) saturate(1.3); -webkit-backdrop-filter: blur(24px) saturate(1.3); border: 1px solid rgba(255,255,255,0.22); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 0 40px rgba(255,255,255,0.04), 0 20px 40px rgba(0,0,0,0.25); padding: 22px 20px 18px; flex: 0 1 auto; min-height: 0; overflow: hidden;">
@@ -867,10 +873,12 @@ class Component extends DCLogic {
         const total = track.offsetHeight - window.innerHeight;
         if (total > 0) p2 = Math.max(0, Math.min(1, -tr.top / total));
       }
-      const morph = ss(0.05, 0.55, p2);
-      const prod = ss(0.55, 0.85, p2);
+      const morph = ss(0, 0.5, p2);
+      const prod = ss(0.5, 0.8, p2);
       spin += (0.00012 + morph * 0.0002) * (this.props.globeSpin ?? 1);
       const scale = Math.max(0.62, Math.min(1.15, W / 1440));
+      // intro paragraph: quick in, quick out, over a small slice of scroll
+      if (this._globeIntro) this._globeIntro.style.opacity = (ss(0, 0.04, p2) * (1 - ss(0.08, 0.16, p2))).toFixed(3);
 
       const scrollY = window.scrollY || window.pageYOffset || 0;
       const navShow = scrollY > window.innerHeight * 0.5;
@@ -1549,6 +1557,7 @@ class Component extends DCLogic {
       canvasRef: (el) => { this._canvas = el; if (el) this.startEngine(); },
       mobileFieldCanvasRef: (el) => { this._mobileFieldCanvas = el; if (el) this.startMobileHeroEngine(); },
       mobileGlobeTrackRef: (el) => { this._mobileGlobeTrack = el; },
+      globeIntroRef: (el) => { this._globeIntro = el; },
       mobileHubLabelRef: (el) => { this._mobileHubLabel = el; },
       mobileGlobeCanvasRef: (el) => { this._mobileGlobeCanvas = el; if (el) this.startMobileGlobeEngine(); },
       navMenuRef: (el) => { this._navMenu = el; },
