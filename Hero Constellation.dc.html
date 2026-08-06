@@ -744,8 +744,16 @@ class Component extends DCLogic {
         }
       }
 
-      // small image tiles for the revealed nodes — auto-shown, never touch-driven
+      // small image tiles for the revealed nodes — auto-shown, never touch-driven.
+      // If a tile happens to land over the hero text, blur it (rather than
+      // hiding it, per "never cut" feedback) so the title stays readable.
       {
+        let heroRect = null;
+        if (this._hero) {
+          const cr = canvas.getBoundingClientRect();
+          const hr = this._hero.getBoundingClientRect();
+          heroRect = { x: hr.left - cr.left - 10, y: hr.top - cr.top - 10, w: hr.width + 20, h: hr.height + 20 };
+        }
         ctx.textBaseline = 'middle';
         for (const d of field) {
           if (d.a <= 0.02) continue;
@@ -758,8 +766,10 @@ class Component extends DCLogic {
           const cardY = d.y + 2;
           const ix = side > 0 ? cardX : cardX - w;
           const iy = cardY - h / 2;
+          const overText = heroRect && ix < heroRect.x + heroRect.w && ix + w > heroRect.x && iy < heroRect.y + heroRect.h && iy + h > heroRect.y;
           ctx.save();
-          ctx.globalAlpha = a * 0.9;
+          if (overText) ctx.filter = 'blur(5px)';
+          ctx.globalAlpha = overText ? a * 0.55 : a * 0.9;
           ctx.strokeStyle = 'rgba(' + DOT + ',0.5)';
           ctx.lineWidth = 1;
           ctx.beginPath();
