@@ -65,7 +65,8 @@
 
     .site-footer { padding: 40px 20px 32px !important; }
 
-    .nav-pill { top: 62px !important; height: 52px !important; width: min(452px, 94vw) !important; padding: 0 16px 0 18px !important; }
+    .nav-pill { top: 20px !important; height: 52px !important; width: min(452px, 94vw) !important; padding: 0 16px 0 18px !important; }
+    .ccc-track { height: 220vh !important; }
     .nav-pill span { height: 32px !important; font-size: 14px !important; padding: 0 16px !important; }
     .nav-pill img { width: 46px !important; height: 25px !important; }
 
@@ -199,7 +200,7 @@
 </div>
 </sc-if>
 
-<div ref="{{ cccTrackRef }}" style="position: relative; background: linear-gradient(0deg, rgb(0,0,0) 40.7%, rgb(0,0,0) 66.77%, rgb(3,12,50) 99.86%, rgb(4,13,56) 145%); height: 360vh;">
+<div ref="{{ cccTrackRef }}" class="ccc-track" style="position: relative; background: linear-gradient(0deg, rgb(0,0,0) 40.7%, rgb(0,0,0) 66.77%, rgb(3,12,50) 99.86%, rgb(4,13,56) 145%); height: 360vh;">
   <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center;">
     <div ref="{{ lettersRowRef }}" class="letters-row" style="position: relative; display: flex; gap: clamp(6px, 1.94vw, 28px); font-family: 'Roboto Condensed', Roboto, sans-serif; font-weight: 600; font-size: clamp(96px, 19.2vw, 276px); line-height: 0.24; white-space: nowrap;">
       <span style="color: rgb(255,255,255); transition: color .4s ease;">C</span>
@@ -877,8 +878,10 @@ class Component extends DCLogic {
       const prod = ss(0.5, 0.8, p2);
       spin += (0.00012 + morph * 0.0002) * (this.props.globeSpin ?? 1);
       const scale = Math.max(0.62, Math.min(1.15, W / 1440));
-      // intro paragraph: quick in, quick out, over a small slice of scroll
-      if (this._globeIntro) this._globeIntro.style.opacity = (ss(0, 0.04, p2) * (1 - ss(0.08, 0.16, p2))).toFixed(3);
+      // intro paragraph: quick in, then stays up through the whole dots-to-
+      // sphere formation (the morph phase), only fading as the card (the
+      // "3rd page") starts taking over
+      if (this._globeIntro) this._globeIntro.style.opacity = (ss(0, 0.04, p2) * (1 - ss(0.42, 0.52, p2))).toFixed(3);
 
       const scrollY = window.scrollY || window.pageYOffset || 0;
       const navShow = scrollY > window.innerHeight * 0.5;
