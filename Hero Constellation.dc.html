@@ -677,7 +677,22 @@ class Component extends DCLogic {
       const cx = W * 0.5, cy = H * 0.5;
       const Rx = W * 0.44, Ry = H * 0.42;
       const hubX = cx + Math.cos(angle) * Rx;
-      const hubY = cy + Math.sin(angle) * Ry;
+      let hubY = cy + Math.sin(angle) * Ry;
+      // The hero text sits mid-orbit — instead of hiding the hub whenever it
+      // would pass behind it (which reads as the animation stalling), bend
+      // the path itself so it dips just below the text and keeps moving,
+      // completing the same full circle without ever going dark.
+      const zone = this._mobileHeroZone;
+      if (zone) {
+        const zoneCX = zone.x + zone.w / 2;
+        const dx = Math.abs(hubX - zoneCX);
+        const innerHalf = zone.w / 2 + 20, outerHalf = zone.w / 2 + 90;
+        const detour = 1 - ss(innerHalf, outerHalf, dx);
+        if (detour > 0.001) {
+          const forcedY = zone.y + zone.h + 34;
+          hubY = hubY + (forcedY - hubY) * detour;
+        }
+      }
 
       const dropR = 300, joinR = 260, minSep = 110;
       for (const d of [...revealed]) {
