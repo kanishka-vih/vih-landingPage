@@ -616,22 +616,6 @@ class Component extends DCLogic {
       revealed.clear();
     };
 
-    const computeHeroZone = () => {
-      if (!this._hero) { this._mobileHeroZone = null; return; }
-      const r = canvas.getBoundingClientRect();
-      const hr = this._hero.getBoundingClientRect();
-      const pad = 14;
-      this._mobileHeroZone = { x: hr.left - r.left - pad, y: hr.top - r.top - pad, w: hr.width + pad * 2, h: hr.height + pad * 2 };
-    };
-    const inZone = (x, y) => {
-      const z = this._mobileHeroZone; if (!z) return false;
-      return x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h;
-    };
-    const rectHitsZone = (rx, ry, rw, rh) => {
-      const z = this._mobileHeroZone; if (!z) return false;
-      return rx < z.x + z.w && rx + rw > z.x && ry < z.y + z.h && ry + rh > z.y;
-    };
-
     const resize = () => {
       const r = canvas.getBoundingClientRect();
       W = r.width; H = r.height;
@@ -641,7 +625,6 @@ class Component extends DCLogic {
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
       buildField();
-      computeHeroZone();
     };
     resize();
     window.addEventListener('resize', resize);
@@ -659,7 +642,6 @@ class Component extends DCLogic {
       // auto-orbit since this canvas never receives touch/mouse input
       angle += 0.0075;
       ctx.clearRect(0, 0, W, H);
-      if (!this._mobileHeroZone) computeHeroZone();
 
       for (const s of stars) {
         const tw = 0.55 + 0.45 * Math.sin(t * s.spd + s.ph);
@@ -708,7 +690,6 @@ class Component extends DCLogic {
       }
 
       for (const d of field) {
-        if (inZone(d.x, d.y)) continue;
         const al = (0.24 + d.glow * 0.66) * d.dim;
         const sizeShift = 0.9 + (Math.sin(d.ph * 4.3 + t * 0.015) + 1) * 0.8;
         ctx.fillStyle = 'rgba(' + (d.purple ? PURPLE : DOT) + ',' + al.toFixed(3) + ')';
@@ -717,47 +698,29 @@ class Component extends DCLogic {
         ctx.fill();
       }
 
-      // Rather than a hard on/off when the hub passes behind the hero text
-      // (which read as the animation abruptly cutting out twice per lap),
-      // fade the reveal smoothly in/out based on the hub's distance to the
-      // text's rectangle — the orbit shape itself is untouched.
-      const heroZoneNow = this._mobileHeroZone;
-      let hubZoneFade = 1;
-      if (heroZoneNow) {
-        const zdx = Math.max(heroZoneNow.x - hubX, 0, hubX - (heroZoneNow.x + heroZoneNow.w));
-        const zdy = Math.max(heroZoneNow.y - hubY, 0, hubY - (heroZoneNow.y + heroZoneNow.h));
-        hubZoneFade = ss(0, 70, Math.hypot(zdx, zdy));
-      }
+      // The hero text sits mid-orbit at z-index above this canvas, so the
+      // hub/lines/tiles simply pass beneath it in the stacking order — no
+      // masking, clipping, or fading needed here at all; the orbit runs
+      // continuously and is never hidden or dimmed.
       const neigh = [...revealed]
         .map(d => ({ d, dist: Math.hypot(d.x - hubX, d.y - hubY) }))
         .sort((a, b) => a.dist - b.dist);
       const focus = neigh.length ? neigh[0].d : null;
 
-      if (revealed.size && hubZoneFade > 0.01) {
-        ctx.save();
-        // clip out the hero-text rectangle so connector lines never cross
-        // through the title/CTA now that it sits mid-orbit
-        ctx.beginPath();
-        ctx.rect(0, 0, W, H);
-        if (this._mobileHeroZone) {
-          const z = this._mobileHeroZone;
-          ctx.rect(z.x, z.y, z.w, z.h);
-        }
-        ctx.clip('evenodd');
+      if (revealed.size) {
         ctx.lineWidth = 1;
         for (const r of revealed) {
-          const strength = 0.5 * r.a * hubZoneFade;
+          const strength = 0.5 * r.a;
           if (strength < 0.01) continue;
           ctx.strokeStyle = 'rgba(' + DOT + ',' + strength.toFixed(3) + ')';
           ctx.beginPath(); ctx.moveTo(hubX, hubY); ctx.lineTo(r.x, r.y); ctx.stroke();
         }
-        ctx.restore();
       }
 
       // hub label — a real DOM element (not canvas) so it can use genuine
       // backdrop-filter glass blur, anchored at the hub dot and extending
       // to the right of it, matching the kunuminst.org reference
-      const hubA = Math.min(1, [...revealed].reduce((m, r) => Math.max(m, r.a), 0)) * hubZoneFade;
+      const hubA = Math.min(1, [...revealed].reduce((m, r) => Math.max(m, r.a), 0));
       const label = this._mobileHubLabel;
       if (label) {
         if (hubA > 0.02 && focus) {
@@ -778,20 +741,10 @@ class Component extends DCLogic {
 
       // small image tiles for the revealed nodes — auto-shown, never touch-driven
       {
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(0, 0, W, H);
-        if (this._mobileHeroZone) {
-          const z = this._mobileHeroZone;
-          ctx.rect(z.x, z.y, z.w, z.h);
-        }
-        ctx.clip('evenodd');
         ctx.textBaseline = 'middle';
         for (const d of field) {
           if (d.a <= 0.02) continue;
-          if (inZone(d.x, d.y)) continue;
-          const a = d.a * hubZoneFade;
-          if (a <= 0.02) continue;
+          const a = d.a;
           const side = d.x < W * 0.55 ? 1 : -1;
           const connectorLen = 56;
           const tile = this._tiles[d.curImg ?? d.img];
@@ -800,7 +753,6 @@ class Component extends DCLogic {
           const cardY = d.y + 2;
           const ix = side > 0 ? cardX : cardX - w;
           const iy = cardY - h / 2;
-          if (rectHitsZone(ix, iy, w, h)) continue;
           ctx.save();
           ctx.globalAlpha = a * 0.9;
           ctx.strokeStyle = 'rgba(' + DOT + ',0.5)';
@@ -817,7 +769,6 @@ class Component extends DCLogic {
           if (tile && tile.complete && tile.naturalWidth) ctx.drawImage(tile._scaled || tile, ix, iy, w, h);
           ctx.restore();
         }
-        ctx.restore();
       }
     };
     this._mobileFieldLastFrame = performance.now();
