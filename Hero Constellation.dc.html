@@ -134,6 +134,7 @@
 <sc-if value="{{ isMobile }}">
 <div class="mobile-hero-page" style="position: relative; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; background: linear-gradient(180deg, rgb(23,23,23) 0%, rgb(26,31,37) 43.26%, rgb(23,24,24) 100%); font-family: Inter, sans-serif;">
   <canvas ref="{{ mobileFieldCanvasRef }}" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1;"></canvas>
+  <div ref="{{ mobileHubLabelRef }}" style="position: absolute; top: 0; left: 0; z-index: 4; pointer-events: none; opacity: 0; display: flex; gap: 6px; white-space: nowrap;"></div>
   <div ref="{{ heroRef }}" style="position: absolute; left: 50%; bottom: 130px; transform: translateX(-50%); width: 88vw; z-index: 5; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;">
     <div style="display: flex; flex-direction: column; gap: 4px;">
       <span style="font-family: 'Roboto Serif', serif; font-weight: 300; font-size: 14px; line-height: 1.5; letter-spacing: -0.18px; color: rgb(225,225,225);">One brain. Every conversation</span>
@@ -721,30 +722,26 @@ class Component extends DCLogic {
         }
       }
 
-      // small hub label bubble — same idea as desktop's, sized down for phone
+      // hub label — a real DOM element (not canvas) so it can use genuine
+      // backdrop-filter glass blur, anchored at the hub dot and extending
+      // to the right of it, matching the kunuminst.org reference
       const hubA = Math.min(1, [...revealed].reduce((m, r) => Math.max(m, r.a), 0));
-      if (hubA > 0.02 && focus && !hubBlocked) {
-        const hubWords = (focus.words || ['Explore']).slice(0, 2);
-        ctx.save();
-        ctx.font = '600 11px Inter, sans-serif';
-        ctx.textBaseline = 'middle';
-        ctx.textAlign = 'center';
-        const padX = 10, ph = 22, boxGap = 6;
-        const boxes = hubWords.map(word => ({ word, pw: ctx.measureText(word).width + padX * 2 }));
-        const rowW = boxes.reduce((s, b) => s + b.pw, 0) + boxGap * (boxes.length - 1);
-        ctx.globalAlpha = hubA;
-        let bx = hubX - rowW / 2;
-        for (const box of boxes) {
-          const by = hubY - ph / 2;
-          ctx.fillStyle = 'rgba(20,98,110,0.92)';
-          roundRect(ctx, bx, by, box.pw, ph, 7); ctx.fill();
-          ctx.strokeStyle = 'rgba(255,255,255,0.28)'; ctx.lineWidth = 1;
-          roundRect(ctx, bx, by, box.pw, ph, 7); ctx.stroke();
-          ctx.fillStyle = 'rgba(255,255,255,0.98)';
-          ctx.fillText(box.word, bx + box.pw / 2, hubY + 1);
-          bx += box.pw + boxGap;
+      const label = this._mobileHubLabel;
+      if (label) {
+        if (hubA > 0.02 && focus && !hubBlocked) {
+          const hubWords = (focus.words || ['Explore']).slice(0, 2);
+          const sig = hubWords.join('|');
+          if (this._mobileHubLabelSig !== sig) {
+            this._mobileHubLabelSig = sig;
+            label.innerHTML = hubWords.map(w =>
+              '<span style="display:inline-block; padding:5px 11px; border-radius:14px; background:rgba(255,255,255,0.14); backdrop-filter:blur(10px) saturate(1.4); -webkit-backdrop-filter:blur(10px) saturate(1.4); border:1px solid rgba(255,255,255,0.3); box-shadow:0 6px 16px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25); color:rgba(255,255,255,0.98); font:600 11px Inter, sans-serif; letter-spacing:0.2px;">' + w + '</span>'
+            ).join('');
+          }
+          label.style.opacity = hubA.toFixed(3);
+          label.style.transform = 'translate(' + (hubX + 10).toFixed(1) + 'px, ' + (hubY - 11).toFixed(1) + 'px)';
+        } else {
+          label.style.opacity = '0';
         }
-        ctx.restore();
       }
 
       // small image tiles for the revealed nodes — auto-shown, never touch-driven
@@ -1561,6 +1558,7 @@ class Component extends DCLogic {
       canvasRef: (el) => { this._canvas = el; if (el) this.startEngine(); },
       mobileFieldCanvasRef: (el) => { this._mobileFieldCanvas = el; if (el) this.startMobileHeroEngine(); },
       mobileGlobeTrackRef: (el) => { this._mobileGlobeTrack = el; },
+      mobileHubLabelRef: (el) => { this._mobileHubLabel = el; },
       mobileGlobeCanvasRef: (el) => { this._mobileGlobeCanvas = el; if (el) this.startMobileGlobeEngine(); },
       navMenuRef: (el) => { this._navMenu = el; },
       navProductsRef: (el) => { this._navProducts = el; this.bindOnce(el, 'click', () => this.goToProducts()); },
